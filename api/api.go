@@ -49,10 +49,7 @@ func (a *Api) mountRoutes() {
 }
 
 func (a *Api) register(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, access-control-allow-origin, access-control-allow-headers")
+	helpers.EnablePostRequestsCors(&w)
 	user := model.User{}
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
@@ -69,7 +66,7 @@ func (a *Api) register(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *Api) getNonce(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+	helpers.EnableGetRequestsCors(&w)
 	pb := r.URL.Query().Get("pb")
 	user := model.User{
 		PublicKey: pb,
@@ -80,10 +77,7 @@ func (a *Api) getNonce(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *Api) sendSignature(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, access-control-allow-origin, access-control-allow-headers")
+	helpers.EnablePostRequestsCors(&w)
 	user := model.User{}
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
@@ -117,5 +111,4 @@ func (a *Api) sendSignature(w http.ResponseWriter, r *http.Request) {
 		user.UpdateNonce(a.DB)
 	}
 	json.NewEncoder(w).Encode(isClientAddressEqualToRecoveredAddress)
-
 }

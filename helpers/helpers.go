@@ -1,8 +1,9 @@
 package helpers
 
 import (
-        "math/rand"
-        "time"
+	"math/rand"
+	"net/http"
+	"time"
 )
 
 func GenerateRandomString(length int) string {
@@ -16,3 +17,13 @@ func GenerateRandomString(length int) string {
         return string(randomStrBytes)
 }
 
+func EnableGetRequestsCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
+func EnablePostRequestsCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Content-Type", "application/json")
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, access-control-allow-origin, access-control-allow-headers")
+}
