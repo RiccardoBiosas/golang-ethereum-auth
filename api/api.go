@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 
+	helpers "github.com/RiccardoBiosas/golang-ethereum-auth/helpers"
 	model "github.com/RiccardoBiosas/golang-ethereum-auth/model"
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -59,7 +60,7 @@ func (a *Api) register(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	user.Nonce = "second_nonce"
+	user.Nonce = helpers.GenerateRandomString(20)
 
 	err = user.CreateUser(a.DB)
 	if err != nil {
@@ -74,7 +75,6 @@ func (a *Api) getNonce(w http.ResponseWriter, r *http.Request) {
 		PublicKey: pb,
 	}
 	user.GetUserNonce(a.DB)
-	fmt.Println("user nonce now", user.Nonce)
 	resp, _ := json.Marshal(user.Nonce)
 	w.Write(resp)
 }
@@ -113,7 +113,7 @@ func (a *Api) sendSignature(w http.ResponseWriter, r *http.Request) {
 	recoveredAddress := crypto.PubkeyToAddress(*secp256k1RecoveredPublicKey).Hex()
 	isClientAddressEqualToRecoveredAddress := strings.ToLower(user.PublicKey) == strings.ToLower(recoveredAddress)
 	if isClientAddressEqualToRecoveredAddress {
-		user.Nonce = "NEW NONCE"
+		user.Nonce = helpers.GenerateRandomString(20)
 		user.UpdateNonce(a.DB)
 	}
 	json.NewEncoder(w).Encode(isClientAddressEqualToRecoveredAddress)
