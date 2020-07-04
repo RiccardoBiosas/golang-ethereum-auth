@@ -61,7 +61,8 @@ func (a *Api) register(w http.ResponseWriter, r *http.Request) {
 
 	err = user.CreateUser(a.DB)
 	if err != nil {
-		log.Fatal(err)
+		helpers.RespondWithError(w, http.StatusConflict, "Public key already registered!")
+		return
 	}
 	resp := map[string]string{"account": user.PublicKey}
 	helpers.RespondWithJSON(w, 201, resp)
@@ -74,8 +75,10 @@ func (a *Api) getNonce(w http.ResponseWriter, r *http.Request) {
 		PublicKey: pb,
 	}
 	user.GetUserNonce(a.DB)
-	// resp, _ := json.Marshal(user.Nonce)
-	// w.Write(resp)
+	if user.Nonce == "" {
+		helpers.RespondWithError(w, http.StatusNotFound, "No matching public key was found!")
+		return
+	}
 	resp := map[string]string{"nonce": user.Nonce}
 	helpers.RespondWithJSON(w, 200, resp)
 }
@@ -116,5 +119,4 @@ func (a *Api) sendSignature(w http.ResponseWriter, r *http.Request) {
 	}
 	resp := map[string]bool{"authenticated": isClientAddressEqualToRecoveredAddress}
 	helpers.RespondWithJSON(w, 201, resp)
-	// json.NewEncoder(w).Encode(isClientAddressEqualToRecoveredAddress)
 }

@@ -32,7 +32,10 @@ func EnablePostRequestsCors(w *http.ResponseWriter) {
 
 func RespondWithJSON(w http.ResponseWriter, statusCode int, payload interface{}) {
 	resp, _ := json.Marshal(payload)
-
 	w.WriteHeader(statusCode)
 	w.Write(resp)
+}
+
+func RespondWithError(w http.ResponseWriter, statusCode int, errorMsg string) {
+	RespondWithJSON(w, statusCode, map[string]string{"error": errorMsg})
 }
