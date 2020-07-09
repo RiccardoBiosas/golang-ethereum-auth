@@ -1,0 +1,24 @@
+version: '3'
+services:
+  db:
+    build:
+      context: ./mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: golang_ethereum_auth
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+    container_name: golang_db
+    ports:
+      - '3306:3306'
+    tty: true
+  api:
+    build: .
+    volumes:
+      - '.:/go'
+    container_name: golang_api
+    ports:
+      - '8080:8080'
+    tty: true
+    depends_on:
+      - db

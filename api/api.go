@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 
 	helpers "github.com/RiccardoBiosas/golang-ethereum-auth/helpers"
@@ -30,7 +29,8 @@ func (a *Api) Mount() {
 		fmt.Println("error loading .env file")
 	}
 	var err error
-	a.DB, err = sql.Open("mysql", os.Getenv("DB_AUTH"))
+	// a.DB, err = sql.Open("mysql", os.Getenv("DB_AUTH"))
+	a.DB, err = sql.Open("mysql", "docker:docker@tcp(db:3306)/golang_ethereum_auth")
 	if err != nil {
 		log.Fatal(err)
 	}
