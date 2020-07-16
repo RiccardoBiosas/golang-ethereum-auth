@@ -14,6 +14,7 @@ services:
     tty: true
   api:
     build: .
+    restart: always
     volumes:
       - '.:/go'
     container_name: golang_api
@@ -22,3 +23,14 @@ services:
     tty: true
     depends_on:
       - db
+  client:
+    build:
+      context: ./client
+    restart: always
+    expose:
+      - 3000
+    ports:
+      - '3000:3000'
+    tty: true
+    volumes:
+      - ./client/src:/client/src
