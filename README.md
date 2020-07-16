@@ -10,12 +10,16 @@ The implemented signature scheme follows the [EIP-712](https://github.com/ethere
 
 ### Run the project
 
+```bash
+docker-compose up
+```
+
 ### To-do list
 
 - [ ] Increase test coverage
 - [ ] Log out API endpoint
 - [ ] Generate JWT
-- [x] Add Dockerfile
+- [x] Add Dockerfile && docker-compose
 - [x] Add database
 - [x] Log in API endpoint with signature verification
 - [x] Register API endpoint
